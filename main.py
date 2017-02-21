@@ -290,12 +290,6 @@ class LoginHandler(BlogHandler):
         else:
             self.render_login_form(error="Invalid password")
 
-        if has_error:
-            t = jinja_env.get_template("login.html")
-            response = t.render(username=username, email=email, errors=errors)
-            self.response.out.write(response)
-        else:
-            self.redirect('/blog/login')
 
 class LogoutHandler(BlogHandler):
 
