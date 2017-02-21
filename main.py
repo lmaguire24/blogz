@@ -22,7 +22,7 @@ class BlogHandler(webapp2.RequestHandler):
 
         # TODO - filter the query so that only posts by the given user
         query = Post.all().filter("author", user).order("-created")
-        return query.fetch(limit=limit, offset=offset)ß
+        return query.fetch(limit=limit, offset=offset)
 
     def get_user_by_name(self, username):
         """ Get a user object from the db, based on their username """
@@ -103,11 +103,11 @@ class BlogIndexHandler(BlogHandler):
         else:
             prev_page = None
 
-        # if len(posts) == self.page_size and Post.all().count() > offset+self.page_size:
-        #     next_page = page + 1
-        # else:
-        #     next_page = None
-        next_page=None
+        if len(posts) == self.page_size and Post.all().count() > offset+self.page_size:
+            next_page = page + 1
+        else:
+            next_page = None
+        # next_page=None
 
         # render the page
         t = jinja_env.get_template("blog.html")
@@ -290,12 +290,12 @@ class LoginHandler(BlogHandler):
         else:
             self.render_login_form(error="Invalid password")
 
-        # if has_error:
-        #     t = jinja_env.get_template("login.html")
-        #     response = t.render(username=username, email=email, errors=errors)
-        #     self.response.out.write(response)
-        # else:
-        #     self.redirect('/blog/login')
+        if has_error:
+            t = jinja_env.get_template("login.html")
+            response = t.render(username=username, email=email, errors=errors)
+            self.response.out.write(response)
+        else:
+            self.redirect('/blog/login')
 
 class LogoutHandler(BlogHandler):
 
